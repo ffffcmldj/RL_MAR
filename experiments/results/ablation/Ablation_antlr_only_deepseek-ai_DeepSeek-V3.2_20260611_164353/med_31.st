@@ -1,0 +1,30 @@
+FUNCTION_BLOCK ChargingStationControl
+VAR_INPUT
+    EVConnected : BOOL;
+    EVVoltage : REAL;
+    EVCurrent : REAL;
+    EVStateOfCharge : REAL;
+    ChargingTimer : TIME;
+END_VAR
+
+VAR_OUTPUT
+    EVCharging : BOOL;
+END_VAR
+
+VAR
+    VoltageOK : BOOL;
+    CurrentOK : BOOL;
+    SOCNotFull : BOOL;
+    TimerOK : BOOL;
+END_VAR
+
+(* Evaluate individual conditions *)
+VoltageOK := EVVoltage > 350.0;
+CurrentOK := EVCurrent <= 32.0;
+SOCNotFull := EVStateOfCharge < 100.0;
+TimerOK := ChargingTimer <= T#2h;
+
+(* Control charging output based on all conditions *)
+EVCharging := EVConnected AND VoltageOK AND CurrentOK AND SOCNotFull AND TimerOK;
+
+END_FUNCTION_BLOCK

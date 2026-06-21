@@ -12,7 +12,6 @@ from MAR.Agent.agent_registry import AgentRegistry
 class DynamicEngineeringTopology(ABC):
     """
     Dynamic Engineering Topology Management System.
-    (原 Graph 类)
 
     Manages the lifecycle and connectivity of functional modules (Agents) within the
     PLC code generation pipeline. It optimizes the workflow topology based on
@@ -53,13 +52,11 @@ class DynamicEngineeringTopology(ABC):
         self.final_llm_name:str = find_mode(llm_names)
         self.agent_names:List[str] = agent_names
         
-        # Optimization Flags
         self.optimized_spatial = optimized_spatial
         self.optimized_temporal = optimized_temporal
         
         self.decision_node:Node = AgentRegistry.get(decision_method, **{"domain":self.domain,"llm_name":self.final_llm_name, "prompt_file":prompt_file})
         
-        # Renamed: nodes -> active_modules
         self.active_modules:Dict[str,Node] = {}
         
         self.potential_spatial_edges:List[List[str, str]] = []
@@ -70,18 +67,14 @@ class DynamicEngineeringTopology(ABC):
         self.init_nodes() 
         self.init_potential_edges() 
         
-        # Renamed: spatial_logits -> connectivity_weights
         init_spatial_logit = torch.log(torch.tensor(initial_spatial_probability / (1 - initial_spatial_probability))) if optimized_spatial else 10.0
         self.connectivity_weights = torch.nn.Parameter(torch.ones(len(self.potential_spatial_edges), requires_grad=optimized_spatial) * init_spatial_logit,
                                                  requires_grad=optimized_spatial) 
-        # Renamed: spatial_masks -> topology_constraints
         self.topology_constraints = torch.nn.Parameter(fixed_spatial_masks,requires_grad=False)  
 
-        # Renamed: temporal_logits -> memory_gate_weights
         init_temporal_logit = torch.log(torch.tensor(initial_temporal_probability / (1 - initial_temporal_probability))) if optimized_temporal else 10.0
         self.memory_gate_weights = torch.nn.Parameter(torch.ones(len(self.potential_temporal_edges), requires_grad=optimized_temporal) * init_temporal_logit,
                                                  requires_grad=optimized_temporal) 
-        # Renamed: temporal_masks -> memory_constraints
         self.memory_constraints = torch.nn.Parameter(fixed_temporal_masks,requires_grad=False)  
         
     @property
@@ -90,7 +83,6 @@ class DynamicEngineeringTopology(ABC):
         matrix = np.zeros((len(self.active_modules), len(self.active_modules)))
         for i, node1_id in enumerate(self.active_modules):
             for j, node2_id in enumerate(self.active_modules):
-                # Using new attribute: collaborative_successors
                 if self.active_modules[node2_id] in self.active_modules[node1_id].collaborative_targets: 
                     matrix[i, j] = 1
         return matrix
@@ -101,7 +93,6 @@ class DynamicEngineeringTopology(ABC):
         matrix = np.zeros((len(self.active_modules), len(self.active_modules)))
         for i, node1_id in enumerate(self.active_modules):
             for j, node2_id in enumerate(self.active_modules):
-                # Using new attribute: memory_targets
                 if self.active_modules[node2_id] in self.active_modules[node1_id].memory_targets: 
                     matrix[i, j] = 1
         return matrix
@@ -165,12 +156,10 @@ class DynamicEngineeringTopology(ABC):
     def optimize_workflow_connectivity(self, temperature: float = 1.0, threshold: float = None,): 
         """
         Dynamically optimizes the signal flow between modules.
-        (Renamed from construct_spatial_connection)
         """
         self.clear_spatial_connection()
         log_probs = [torch.tensor(0.0, requires_grad=self.optimized_spatial)]
         
-        # Iterate over potential edges and weights
         for potential_connection, edge_logit, edge_mask in zip(self.potential_spatial_edges, self.connectivity_weights, self.topology_constraints):
             out_node:Node = self.find_node(potential_connection[0])
             in_node:Node = self.find_node(potential_connection[1])
@@ -195,7 +184,6 @@ class DynamicEngineeringTopology(ABC):
     def update_memory_mechanisms(self, round:int = 0, temperature: float = 1.0, threshold: float = None,): 
         """
         Updates the memory feedback loops for iterative refinement.
-        (Renamed from construct_temporal_connection)
         """
         self.clear_temporal_connection()
         log_probs = [torch.tensor(0.0, requires_grad=self.optimized_temporal)]
@@ -232,19 +220,16 @@ class DynamicEngineeringTopology(ABC):
                   max_concurrent: int = 3,) -> List[Any]:
         """
         Executes the PLC code generation pipeline simulation.
-        (Renamed from run)
 
         Args:
-            use_async: 是否使用异步并行执行 (性能优化)
-            max_concurrent: 最大并发 Agent 数量
+            use_async: Whether to use async parallel execution
+            max_concurrent: Max concurrent agents
         """
         if use_async:
-            # 使用异步并行执行
             return asyncio.run(self._execute_pipeline_async(
                 inputs, num_rounds, max_tries, max_time, max_concurrent
             ))
         else:
-            # 使用原有的串行执行逻辑
             return self._execute_pipeline_sync(
                 inputs, num_rounds, max_tries, max_time
             )
@@ -257,7 +242,7 @@ class DynamicEngineeringTopology(ABC):
         max_concurrent: int = 3,
     ) -> List[Any]:
         """
-        异步并行执行生成管线 (性能优化版本)
+        Async parallel execution pipeline (optimized version)
         """
         log_probs = 0
 
@@ -265,22 +250,17 @@ class DynamicEngineeringTopology(ABC):
             log_probs += self.optimize_workflow_connectivity()
             log_probs += self.update_memory_mechanisms(round)
 
-            # 构建执行层级 (无依赖的 Agent 可以并行)
             execution_layers = self._build_execution_layers()
 
-            # 按层级执行，每层内并行
             for layer in execution_layers:
                 if len(layer) == 1:
-                    # 单个 Agent，直接执行
                     node = layer[0]
                     node.execute(inputs)
                 else:
-                    # 多个无依赖 Agent，并行执行
                     await self._execute_layer_async(layer, inputs, max_concurrent)
 
             self.update_system_states()
 
-        # 决策节点执行
         self.connect_decision_node()
         self.decision_node.execute(inputs)
         final_answers = self.decision_node.outputs
@@ -296,14 +276,13 @@ class DynamicEngineeringTopology(ABC):
         max_time: int = 100,
     ) -> List[Any]:
         """
-        串行执行生成管线 (原有逻辑，保持兼容性)
+        Synchronous execution pipeline (original logic, kept for compatibility)
         """
         log_probs = 0
         for round in range(num_rounds):
             log_probs += self.optimize_workflow_connectivity()
             log_probs += self.update_memory_mechanisms(round)
 
-            # Topological Sort Logic using new attribute names
             in_degree = {node_id: len(node.collaborative_sources) for node_id, node in self.active_modules.items()}
             ready_queue = [node_id for node_id, deg in in_degree.items() if deg == 0]
 
@@ -335,20 +314,18 @@ class DynamicEngineeringTopology(ABC):
 
     def _build_execution_layers(self) -> List[List['Node']]:
         """
-        构建执行层级：
-        - Layer 0: 无入度的节点 (可并行)
-        - Layer 1: 依赖 Layer 0 的节点 (可并行)
+        Build execution layers:
+        - Layer 0: Nodes with no dependencies (parallelizable)
+        - Layer 1: Nodes depending on Layer 0 (parallelizable)
         - ...
         """
         layers = []
         remaining = set(self.active_modules.keys())
 
         while remaining:
-            # 找出当前层可执行的节点
             current_layer = []
             for node_id in list(remaining):
                 node = self.active_modules[node_id]
-                # 检查所有依赖是否已完成
                 sources_in_remaining = [
                     src for src in node.collaborative_sources
                     if src.id in remaining
@@ -357,7 +334,6 @@ class DynamicEngineeringTopology(ABC):
                     current_layer.append(node_id)
 
             if not current_layer:
-                # 检测到环，强制添加一个节点
                 current_layer = [next(iter(remaining))]
 
             layers.append([self.active_modules[nid] for nid in current_layer])
@@ -369,7 +345,7 @@ class DynamicEngineeringTopology(ABC):
         self, layer: List['Node'], inputs: Dict[str, str], max_concurrent: int = 3
     ):
         """
-        并行执行一层中的所有 Agent
+        Execute all Agents in a layer in parallel
         """
         semaphore = asyncio.Semaphore(max_concurrent)
 
@@ -380,7 +356,6 @@ class DynamicEngineeringTopology(ABC):
         tasks = [execute_with_limit(node) for node in layer]
         await asyncio.gather(*tasks, return_exceptions=True)
 
-    # Alias for compatibility
     run = execute_generation_pipeline
 
     def update_system_states(self):

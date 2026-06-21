@@ -1,0 +1,158 @@
+START_REASON  
+The error occurred because the expression `(PPAL1 OR PP2)` uses an undefined variable `PPAL1`. This variable was not declared in the `VAR`, `VAR_INPUT`, `VAR_OUTPUT`, or `VAR_TEMP` sections. As a result, the CODESYS compiler cannot resolve its type, leading to the error message about an "unknown type." To fix this issue, I will declare `PPAL1` in the appropriate variable section and ensure its type is defined as `BOOL`. Additionally, I will review the code for any other potential issues or inconsistencies.  
+END_REASON  
+
+START_ST  
+FUNCTION_BLOCK FB_AdvancedCircuitBreakerControl  
+VAR_INPUT  
+    S_AL1_P_B1 : BOOL;  
+    S_AL1_P_B2 : BOOL;  
+    S_AL1_MCB : BOOL;  
+    MCB_BUSY : BOOL;  
+    MCB_ERROR : BOOL;  
+    S_AL1_MCBR : BOOL;  
+    MCBR_BUSY : BOOL;  
+    MCBR_ERROR : BOOL;  
+    S_AL1_P_B3 : BOOL;  
+    S_AL1_MCB2 : BOOL;  
+    S_AL1_MCBR2 : BOOL;  
+END_VAR  
+
+VAR_OUTPUT  
+    E_AL1_B1 : BOOL;  
+    PUWS_AL1_B1_PLUS : BOOL;  
+    PUWS_AL1_B1_RIGHT : BOOL;  
+    PAS_AL1_PLUS : BOOL;  
+    PAS_AL1_TURN : BOOL;  
+END_VAR  
+
+VAR  
+    PP0 : BOOL := TRUE;  
+    PP1 : BOOL := FALSE;  
+    PP2 : BOOL := FALSE;  
+    PP3 : BOOL := FALSE;  
+    PP4 : BOOL := FALSE;  
+    PP5 : BOOL := FALSE;  
+    PP7 : BOOL := FALSE;  
+    PPL3 : BOOL := FALSE;  
+    PPL4 : BOOL := FALSE;  
+    PPL5 : BOOL := FALSE;  
+    PPL7 : BOOL := FALSE;  
+    STABLE : BOOL := FALSE;  
+    MCB_CONTROL : BOOL := FALSE;  
+    MCB : BOOL := TRUE;  
+    MCBR : BOOL := TRUE;  
+    PPAL1 : BOOL := FALSE; // Declared PPAL1 as BOOL to fix the error  
+END_VAR  
+
+VAR_TEMP  
+    TempStable : BOOL;  
+END_VAR  
+
+// Main logic  
+WHILE NOT STABLE DO  
+    STABLE := TRUE; // Assume stability at the start of the loop  
+
+    // State Transitions  
+    IF PP0 AND NOT MCB_CONTROL AND NOT PP1 THEN  
+        PP0 := FALSE;  
+        PP1 := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PP1 AND S_AL1_P_B1 AND NOT PP2 THEN  
+        PP1 := FALSE;  
+        PP2 := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PP2 AND S_AL1_P_B2 AND NOT MCB_CONTROL AND NOT PP3 THEN  
+        PP2 := FALSE;  
+        PP3 := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PP3 AND S_AL1_MCB AND NOT PP4 AND NOT PP1 THEN  
+        PP3 := FALSE;  
+        PP4 := TRUE;  
+        PP1 := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PP4 AND MCB AND MCB_BUSY AND NOT PP5 THEN  
+        PP4 := FALSE;  
+        MCB := FALSE;  
+        PP5 := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PP5 AND S_AL1_MCB2 AND NOT PP7 AND NOT MCB THEN  
+        PP5 := FALSE;  
+        PP7 := TRUE;  
+        MCB := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PP7 AND S_AL1_P_B3 THEN  
+        PP7 := FALSE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PP2 AND S_AL1_P_B2 AND MCB_CONTROL AND NOT PPL3 AND NOT PP1 THEN  
+        PP2 := FALSE;  
+        PPL3 := TRUE;  
+        PP1 := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PPL3 AND S_AL1_MCBR AND NOT PPL4 THEN  
+        PPL3 := FALSE;  
+        PPL4 := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PPL4 AND MCBR AND MCBR_BUSY AND NOT PPL5 THEN  
+        PPL4 := FALSE;  
+        MCBR := FALSE;  
+        PPL5 := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PPL5 AND S_AL1_MCBR2 AND NOT PPL7 AND NOT MCBR THEN  
+        PPL5 := FALSE;  
+        PPL7 := TRUE;  
+        MCBR := TRUE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+    IF PPL7 AND S_AL1_P_B3 THEN  
+        PPL7 := FALSE;  
+        STABLE := FALSE;  
+    END_IF;  
+
+END_WHILE;  
+
+// Output Control  
+E_AL1_B1 := PP0 OR PP1;  
+PUWS_AL1_B1_PLUS := PPAL1 OR PP2;  
+PUWS_AL1_B1_RIGHT := NOT (PPAL1 OR PP2);  
+PAS_AL1_PLUS := PPL3 OR PPL4;  
+PAS_AL1_TURN := PPL3 OR PPL4;  
+
+IF PP3 THEN  
+    MCB_CONTROL := TRUE;  
+ELSE  
+    MCB_CONTROL := FALSE;  
+END_IF;  
+
+IF PP0 OR PP3 THEN  
+    PAS_AL1_PLUS := FALSE;  
+    PAS_AL1_TURN := FALSE;  
+END_IF;  
+
+IF PP0 OR PP3 OR PP4 THEN  
+    PUWS_AL1_B1_RIGHT := FALSE;  
+END_IF;  
+
+END_FUNCTION_BLOCK  
+END_ST  

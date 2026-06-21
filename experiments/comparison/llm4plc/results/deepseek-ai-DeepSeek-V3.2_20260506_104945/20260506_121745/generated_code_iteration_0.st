@@ -1,0 +1,31 @@
+START_ST
+FUNCTION_BLOCK FB_SimpleRepeat
+VAR_INPUT
+    INPUT_VAR1 : INT := 2;
+    INPUT_COUNTER : INT := 4;
+END_VAR
+
+VAR_OUTPUT
+    OUTPUT_VAR1 : INT;
+END_VAR
+
+VAR
+    COUNTER : INT;
+END_VAR
+
+(* Initialize OUTPUT_VAR1 with INPUT_VAR1 *)
+OUTPUT_VAR1 := INPUT_VAR1;
+
+(* Initialize local counter with INPUT_COUNTER *)
+COUNTER := INPUT_COUNTER;
+
+(* REPEAT loop: execute at least once, then repeat while COUNTER > 1 *)
+REPEAT
+    OUTPUT_VAR1 := OUTPUT_VAR1 * 2;
+    COUNTER := COUNTER - 1;
+UNTIL
+    COUNTER <= 0
+END_REPEAT;
+
+END_FUNCTION_BLOCK
+END_ST

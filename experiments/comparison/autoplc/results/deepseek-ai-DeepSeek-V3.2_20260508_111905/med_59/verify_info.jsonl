@@ -1,0 +1,1 @@
+{"st_before_fix": "FUNCTION_BLOCK FB_ConditionalSelectAndAggregate\nVAR_INPUT\n    Z : INT;\nEND_VAR\nVAR\n    A_X : INT := 42;\n    A_Y : INT := 333;\nEND_VAR\nVAR_OUTPUT\n    NEW_Z : INT;\nEND_VAR\n\n    IF A_X > Z THEN\n        NEW_Z := A_Y;\n    ELSE\n        NEW_Z := Z;\n    END_IF;\n    \n    NEW_Z := NEW_Z + A_X + A_Y;\nEND_FUNCTION_BLOCK", "compiler": [], "assistant": ""}

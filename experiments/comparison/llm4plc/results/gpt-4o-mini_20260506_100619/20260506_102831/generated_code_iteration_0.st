@@ -1,0 +1,35 @@
+ructured-text
+START_ST
+FUNCTION_BLOCK FB_ThresholdAccumulator
+VAR_INPUT
+    i : INT; // INPUT VALUE
+END_VAR
+
+VAR_OUTPUT
+    o : INT; // OUTPUT VALUE
+END_VAR
+
+VAR
+    s1 : INT; // INTERNAL VARIABLE FOR ACCUMULATION
+END_VAR
+
+// Logic Flow
+s1 := 0; // STATE 0: INITIALIZE
+
+IF i > 0 THEN // STATE 1: PROCESS INPUT
+    s1 := s1 + i;
+END_IF;
+
+IF s1 = 42 THEN // STATE 2: CHECK THRESHOLD
+    s1 := s1 + 8000;
+END_IF;
+
+// STATE 3: SET OUTPUT
+IF s1 < 0 THEN
+    o := 0;
+ELSE
+    o := s1;
+END_IF;
+
+END_FUNCTION_BLOCK
+END_ST

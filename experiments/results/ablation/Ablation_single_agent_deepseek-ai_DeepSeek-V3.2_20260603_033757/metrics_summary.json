@@ -1,0 +1,68 @@
+{
+  "ablation_mode": "single_agent",
+  "model": "deepseek-ai/DeepSeek-V3.2",
+  "total_samples": 94,
+  "overall_pass_rate": 0.7766,
+  "overall_solved": 73,
+  "avg_cost": 0.007165,
+  "total_cost": 0.6735,
+  "avg_agents": 1.0,
+  "total_tokens": 290078,
+  "avg_tokens_per_task": 3086,
+  "domain_stats": {
+    "SequentialLogicControl": {
+      "total": 42,
+      "solved": 35,
+      "pass_rate": 0.8333333333333334,
+      "avg_cost": 0.007237261904761906,
+      "avg_tokens": 3122.714285714286
+    },
+    "ProcessControl": {
+      "total": 9,
+      "solved": 6,
+      "pass_rate": 0.6666666666666666,
+      "avg_cost": 0.008522444444444437,
+      "avg_tokens": 3598.0
+    },
+    "MotionAndSortingControl": {
+      "total": 9,
+      "solved": 9,
+      "pass_rate": 1.0,
+      "avg_cost": 0.005423666666666676,
+      "avg_tokens": 2337.8888888888887
+    },
+    "DataHandlingAndCommunication": {
+      "total": 29,
+      "solved": 18,
+      "pass_rate": 0.6206896551724138,
+      "avg_cost": 0.006866413793103448,
+      "avg_tokens": 2980.0
+    },
+    "SafetyAndMonitoring": {
+      "total": 5,
+      "solved": 5,
+      "pass_rate": 1.0,
+      "avg_cost": 0.008984399999999993,
+      "avg_tokens": 3816.2
+    }
+  },
+  "codesys_validation": {
+    "total": 94,
+    "passed": 80,
+    "pass_rate": 0.8511,
+    "antlr_pass_rate": 0.7766
+  },
+  "codesys_comparison": {
+    "both_pass": 70,
+    "both_fail": 11,
+    "antlr_only": 3,
+    "codesys_only": 10
+  },
+  "experiment_info": {
+    "ablation": "single_agent",
+    "model": "deepseek-ai/DeepSeek-V3.2",
+    "data_path": "Datasets/PLC/data/0513/integrated_0519_classified_corrected_0526_backup.jsonl",
+    "output_dir": "Experiments/results/Ablation_single_agent_deepseek-ai_DeepSeek-V3.2_20260603_033757",
+    "cost_currency": "CNY"
+  }
+}

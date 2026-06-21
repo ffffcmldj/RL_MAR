@@ -1,0 +1,116 @@
+{
+  "total_samples": 94,
+  "overall_pass_rate": 0.8085106382978723,
+  "overall_solved": 76,
+  "avg_cost": 0.019301510638297846,
+  "total_cost": 1.8143419999999977,
+  "avg_agents": 3.090469938643435,
+  "avg_latency": 88.99676564906505,
+  "total_prompt_tokens": 577027,
+  "total_completion_tokens": 220096,
+  "total_tokens": 797123,
+  "avg_tokens_per_task": 8480.031914893618,
+  "domain_stats": {
+    "SequentialLogicControl": {
+      "total": 42,
+      "solved": 35,
+      "pass_rate": 0.8333333333333334,
+      "avg_cost": 0.017565976190476146,
+      "avg_agents": 3.0858707427978516
+    },
+    "ProcessControl": {
+      "total": 9,
+      "solved": 6,
+      "pass_rate": 0.6666666666666666,
+      "avg_cost": 0.01893955555555551,
+      "avg_agents": 3.110650062561035
+    },
+    "MotionAndSortingControl": {
+      "total": 9,
+      "solved": 9,
+      "pass_rate": 1.0,
+      "avg_cost": 0.016307444444444454,
+      "avg_agents": 3.091440518697103
+    },
+    "DataHandlingAndCommunication": {
+      "total": 29,
+      "solved": 21,
+      "pass_rate": 0.7241379310344828,
+      "avg_cost": 0.022241172413793097,
+      "avg_agents": 3.0894538698525262
+    },
+    "SafetyAndMonitoring": {
+      "total": 5,
+      "solved": 5,
+      "pass_rate": 1.0,
+      "avg_cost": 0.022870799999999986,
+      "avg_agents": 3.0969251155853272
+    }
+  },
+  "routing_accuracy": 1.0,
+  "routing_correct": 94,
+  "routing_total": 94,
+  "topology_distribution": {
+    "Debate": 17,
+    "CoT": 17,
+    "FullConnected": 19,
+    "Reflection": 15,
+    "Chain": 16,
+    "IO": 10
+  },
+  "topology_solved": {
+    "Debate": 15,
+    "CoT": 10,
+    "Reflection": 11,
+    "Chain": 15,
+    "FullConnected": 15,
+    "IO": 10
+  },
+  "agent_count_dist": {
+    "3": 84,
+    "2": 10
+  },
+  "error_types": {
+    "Other": 18
+  },
+  "domain_routing_acc": {
+    "SequentialLogicControl": 1.0,
+    "ProcessControl": 1.0,
+    "MotionAndSortingControl": 1.0,
+    "DataHandlingAndCommunication": 1.0,
+    "SafetyAndMonitoring": 1.0
+  },
+  "experiment_info": {
+    "ablation_mode": "random_topo",
+    "model": "deepseek-ai/DeepSeek-V3.2",
+    "model_timestamp": "20260603_051006",
+    "train_mode": false,
+    "cost_rate": 20.0,
+    "max_agent": 6,
+    "use_async": true,
+    "data_path": "Datasets/PLC/data/0513/integrated_0519_classified_corrected_0526_backup.jsonl",
+    "output_dir": "Experiments/results/Ablation_random_topo_deepseek-ai_DeepSeek-V3.2_20260603_051006",
+    "cost_currency": "CNY"
+  },
+  "ablation_metrics": {
+    "mode": "random_topo",
+    "avg_retry_count": 0.20212765957446807,
+    "total_retries": 19,
+    "tasks_with_retry": 19,
+    "first_pass_antlr_pass_rate": 0.8085106382978723,
+    "first_pass_antlr_passed": 76,
+    "first_pass_antlr_total": 94
+  },
+  "codesys_validation": {
+    "total": 94,
+    "passed": 85,
+    "pass_rate": 0.9043,
+    "antlr_pass_rate": 0.8085
+  },
+  "codesys_comparison": {
+    "both_pass": 75,
+    "both_fail": 8,
+    "antlr_only": 1,
+    "codesys_only": 10
+  }
+}

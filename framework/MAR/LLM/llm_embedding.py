@@ -6,7 +6,7 @@ LOCAL_MODEL_FALLBACK = os.getenv("LOCAL_MODEL_PATH", "")
 
 
 def _resolve_model_path():
-    """优先环境变量，其次硬编码本地路径，最后 None（由调用方决定默认值）"""
+    """Resolve model path: env var -> local fallback -> None (caller decides default)."""
     path = os.environ.get('LOCAL_MODEL_PATH', '')
     if path and os.path.exists(path):
         return path

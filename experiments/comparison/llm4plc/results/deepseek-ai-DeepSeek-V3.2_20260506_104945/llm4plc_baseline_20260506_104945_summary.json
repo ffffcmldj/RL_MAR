@@ -1,0 +1,91 @@
+{
+    "experiment_summary": {
+        "total_tasks": 94,
+        "solved_tasks": 84,
+        "unsolved_tasks": 10,
+        "pass_rate": 89.36,
+        "total_execution_time_seconds": 8674.36,
+        "total_cost": 1.247736,
+        "avg_cost_per_task": 0.013274,
+        "avg_time_per_task_seconds": 92.28,
+        "total_tokens": {
+            "prompt": 341283,
+            "completion": 188390,
+            "total": 529673
+        },
+        "iteration_stats": {
+            "iteration_0": {
+                "total": 94,
+                "antlr_passed": 92,
+                "codesys_passed": 76,
+                "both_passed": 74
+            },
+            "iteration_1": {
+                "total": 20,
+                "antlr_passed": 6,
+                "codesys_passed": 3,
+                "both_passed": 2
+            },
+            "iteration_2": {
+                "total": 18,
+                "antlr_passed": 15,
+                "codesys_passed": 6,
+                "both_passed": 6
+            },
+            "iteration_3": {
+                "total": 12,
+                "antlr_passed": 6,
+                "codesys_passed": 2,
+                "both_passed": 2
+            }
+        },
+        "category_stats": {
+            "DataHandlingAndCommunication": {
+                "total": 26,
+                "solved": 21,
+                "antlr_solved": 23,
+                "codesys_solved": 21,
+                "both_solved": 21,
+                "cost": 0.437564,
+                "time": 3122.0121552944183
+            },
+            "MotionAndSortingControl": {
+                "total": 9,
+                "solved": 9,
+                "antlr_solved": 9,
+                "codesys_solved": 9,
+                "both_solved": 9,
+                "cost": 0.09339000000000001,
+                "time": 612.8626403808594
+            },
+            "ProcessControl": {
+                "total": 37,
+                "solved": 34,
+                "antlr_solved": 35,
+                "codesys_solved": 34,
+                "both_solved": 34,
+                "cost": 0.39978800000000014,
+                "time": 2660.032223701477
+            },
+            "SafetyAndMonitoring": {
+                "total": 10,
+                "solved": 8,
+                "antlr_solved": 9,
+                "codesys_solved": 8,
+                "both_solved": 8,
+                "cost": 0.18852000000000002,
+                "time": 1453.3301899433136
+            },
+            "SequentialLogicControl": {
+                "total": 12,
+                "solved": 12,
+                "antlr_solved": 12,
+                "codesys_solved": 12,
+                "both_solved": 12,
+                "cost": 0.128474,
+                "time": 825.8302502632141
+            }
+        },
+        "cost_currency": "CNY"
+    }
+}

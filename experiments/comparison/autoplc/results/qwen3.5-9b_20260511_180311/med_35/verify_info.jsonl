@@ -1,0 +1,1 @@
+{"st_before_fix": "FUNCTION_BLOCK FB_SimpleCalculation\nVAR_INPUT\nINPUT_VAR1 : INT := 2;\nVAR2 : INT := 0;\nEND_VAR\n\nVAR_OUTPUT\nOUTPUT_VAR1 : INT;\nOUTPUT_VAR2 : INT;\nEND_VAR\n\nVAR\nCOUNTER2 : INT := 0;\nTEMP_VAR1 : INT;\nTEMP_VAR2 : INT;\nI : INT;\nEND_VAR\n\nEND_FUNCTION_BLOCK", "compiler": [], "assistant": ""}

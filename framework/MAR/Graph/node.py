@@ -32,14 +32,9 @@ class Node(ABC):
         self.domain:str = domain
         self.llm_name:str = llm_name
         
-        # --- R&D Style Renaming ---
-        # 原 spatial_predecessors -> collaborative_sources (协作源)
         self.collaborative_sources: List[Node] = []
-        # 原 spatial_successors -> collaborative_targets (协作目标)
         self.collaborative_targets: List[Node] = []
-        # 原 temporal_predecessors -> memory_sources (记忆源/反馈源)
         self.memory_sources: List[Node] = []
-        # 原 temporal_successors -> memory_targets (记忆目标/反馈目标)
         self.memory_targets: List[Node] = []
         
         self.inputs: List[Any] = []
@@ -101,7 +96,6 @@ class Node(ABC):
     def aggregate_collaborative_context(self) -> Dict[str, Dict]:
         """
         Aggregate signals from upstream collaborative modules.
-        (Renamed from get_spatial_info)
         """
         context_info = {}
         if self.collaborative_sources is not None:
@@ -120,7 +114,6 @@ class Node(ABC):
     def retrieve_iteration_history(self) -> Dict[str, Any]:
         """
         Retrieve state feedback from previous iterations.
-        (Renamed from get_temporal_info)
         """
         history_info = {}
         if self.memory_sources is not None:
@@ -139,11 +132,9 @@ class Node(ABC):
     def execute(self, input:Any, **kwargs):
         """Execute the module logic for the current cycle."""
         self.outputs = []
-        # Update: Use new method names
         spatial_info = self.aggregate_collaborative_context()
         temporal_info = self.retrieve_iteration_history()
         
-        # Pass to internal implementation (Agent logic)
         results = [self._execute(input, spatial_info, temporal_info, **kwargs)]
 
         for result in results:

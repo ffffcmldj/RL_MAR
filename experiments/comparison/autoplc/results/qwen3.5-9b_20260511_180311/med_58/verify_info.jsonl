@@ -1,0 +1,1 @@
+{"st_before_fix": "FUNCTION_BLOCK FB_ThresholdAccumulator\nVAR_INPUT\ni : INT;\nEND_VAR\nVAR_OUTPUT\no : INT;\nEND_VAR\nVAR\ns1 : INT;\nEND_VAR\n\ns1 := 0;\nIF i > 0 THEN\ns1 := s1 + i;\nEND_IF;\nIF s1 = 42 THEN\ns1 := s1 + 8000;\nEND_IF;\nIF s1 < 0 THEN\no := 0;\nELSE\no := s1;\nEND_IF;\nEND_FUNCTION_BLOCK", "compiler": [], "assistant": ""}

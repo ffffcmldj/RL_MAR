@@ -1,30 +1,19 @@
 import re
 from typing import Dict
 
-# -----------------------------------------------------------------------------------
-# [关键修改] 导入真实的验证工具
-# -----------------------------------------------------------------------------------
 try:
-    # 尝试从 MAR.Tools.PLC.validators 导入 st_syntax_checker_tool
     from MAR.Tools.PLC.validators import st_syntax_checker_tool
-    # 可以在这里打印一下，但在正式代码里建议注释掉，避免日志太乱
-    # print("DEBUG: 已加载真实的 ANTLR 语法检查工具") 
 except ImportError as e:
-    # 只有在找不到真工具时，才定义一个临时的替补
-    # 这样就绝对不会发生“覆盖”的情况了
     print(f"Warning: 无法加载真实工具 ({e})，使用简易回退模式。")
     
     def st_syntax_checker_tool(code: str) -> Dict:
         """
-        这是一个紧急替补函数，只有在 import 失败时才会存在。
+        A fallback function that only exists when the real import fails.
         """
         if not code.strip().endswith(';'):
             return {"passed": False, "error": "Missing semicolon at the end of a statement."}
         return {"passed": True, "error": None}
 
-# -----------------------------------------------------------------------------------
-# 注意：这里原本的 def st_syntax_checker_tool ... 已经被删得干干净净！
-# -----------------------------------------------------------------------------------
 
 def property_validator_tool(code: str, properties: list) -> Dict:
     """
@@ -33,7 +22,6 @@ def property_validator_tool(code: str, properties: list) -> Dict:
     """
     validated_properties = {}
     for prop in properties:
-        # A simple keyword-based check for demonstration purposes
         prop_logic = prop.get("property", {}).get("pattern_params", {}).get("1", "")
         if "NOT" in prop_logic and "AND" in prop_logic and "instance.Motor" in prop_logic:
             if "MotorMovingUp" in code and "MotorMovingDown" in code and "MotorMovingUp := NOT MotorMovingDown" in code.replace(" ", ""):
@@ -45,16 +33,12 @@ def property_validator_tool(code: str, properties: list) -> Dict:
     return validated_properties
 
 
-# -----------------------------------------------------------------------------------
-# Main Aggregation Logic
-# -----------------------------------------------------------------------------------
 
 def message_aggregation(raw_inputs: Dict[str, str], messages: Dict[str, Dict], aggregation_method: str):
     """
     Aggregates messages from other agents based on the specified method,
     tailored for PLC ST code generation workflows.
     """
-    # New aggregation options for PLC
     if aggregation_method == "Normal":
         return normal_agg(raw_inputs, messages)
     elif aggregation_method == "STSyntaxCheck":
@@ -64,7 +48,6 @@ def message_aggregation(raw_inputs: Dict[str, str], messages: Dict[str, Dict], a
     elif aggregation_method == "LogicAndCodeIntegration":
         return logic_and_code_integration_agg(raw_inputs, messages)
     else:
-        # Default to normal aggregation if the method is unknown
         return normal_agg(raw_inputs, messages)
 
 
@@ -87,7 +70,6 @@ def st_syntax_check_agg(raw_inputs: Dict[str, str], messages: Dict[str, Dict]) -
     Useful for code generators who need to know if previous code snippets are valid.
     """
     aggregated_message = ""
-    # Regex to extract code from markdown blocks
     st_code_pattern = r"```st(.*?)```"
 
     for agent_id, info in messages.items():
@@ -99,9 +81,6 @@ def st_syntax_check_agg(raw_inputs: Dict[str, str], messages: Dict[str, Dict]) -
         if match:
             code_snippet = match.group(1).strip()
             
-            # 【这里调用工具】
-            # 因为上面已经确保了 st_syntax_checker_tool 肯定是 import 进来的（或者是 ImportError 里的替补）
-            # 所以这里一定是目前能用的最好的工具
             syntax_result = st_syntax_checker_tool(code_snippet)
             
             if syntax_result["passed"]:

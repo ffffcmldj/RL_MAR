@@ -1,0 +1,34 @@
+ructured-text
+START_ST
+FUNCTION_BLOCK AutomaticDoorControl
+VAR_INPUT
+    ProximitySensor : BOOL; // INPUT FROM PROXIMITY SENSOR
+    ElapsedTime : DINT; // TIME ELAPSED SINCE DOOR WAS LAST OPENED
+END_VAR
+
+VAR_OUTPUT
+    DoorOpen : BOOL; // OUTPUT INDICATING IF DOOR IS OPEN OR CLOSED
+END_VAR
+
+VAR
+    DoorState: INT; // STATE VARIABLE
+    DoorOpenDuration: DINT := 5000; // DURATION FOR DOOR TO REMAIN OPEN
+END_VAR
+
+// IMPLEMENT THE LOGIC
+CASE DoorState OF
+    0: // DOOR_CLOSED
+        DoorOpen := FALSE; // DOOR IS CLOSED
+        IF ProximitySensor THEN // IF PROXIMITY SENSOR IS ACTIVATED
+            DoorState := 1; // CHANGE TO DOOR_OPEN STATE
+        END_IF
+
+    1: // DOOR_OPEN
+        DoorOpen := TRUE; // DOOR IS OPEN
+        IF NOT ProximitySensor OR ElapsedTime >= DoorOpenDuration THEN // IF SENSOR IS DEACTIVATED OR TIME ELAPSED
+            DoorState := 0; // CHANGE TO DOOR_CLOSED STATE
+        END_IF
+END_CASE
+
+END_FUNCTION_BLOCK
+END_ST

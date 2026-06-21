@@ -1,0 +1,97 @@
+{
+  "experiment_summary": {
+    "total_tasks": 94,
+    "solved_tasks": 70,
+    "unsolved_tasks": 24,
+    "pass_rate": 74.47,
+    "total_execution_time_seconds": 9183.88,
+    "total_cost": 1.109665,
+    "avg_cost_per_task": 0.011805,
+    "avg_time_per_task_seconds": 97.7,
+    "total_tokens": {
+      "prompt": 445246,
+      "completion": 221759,
+      "total": 667005
+    },
+    "iteration_stats": {
+      "iteration_0": {
+        "total": 94,
+        "antlr_passed": 72,
+        "codesys_passed": 69,
+        "both_passed": 66
+      },
+      "iteration_1": {
+        "total": 90,
+        "antlr_passed": 72,
+        "codesys_passed": 73,
+        "both_passed": 70
+      },
+      "iteration_2": {
+        "total": 20,
+        "antlr_passed": 5,
+        "codesys_passed": 4,
+        "both_passed": 4
+      },
+      "iteration_3": {
+        "total": 13,
+        "antlr_passed": 2,
+        "codesys_passed": 0,
+        "both_passed": 0
+      }
+    },
+    "category_stats": {
+      "DataHandlingAndCommunication": {
+        "total": 26,
+        "solved": 13,
+        "antlr_solved": 14,
+        "codesys_solved": 14,
+        "both_solved": 13,
+        "cost": 0.453275,
+        "time": 0.0
+      },
+      "MotionAndSortingControl": {
+        "total": 9,
+        "solved": 9,
+        "antlr_solved": 9,
+        "codesys_solved": 9,
+        "both_solved": 9,
+        "cost": 0.069848,
+        "time": 0.0
+      },
+      "ProcessControl": {
+        "total": 37,
+        "solved": 31,
+        "antlr_solved": 33,
+        "codesys_solved": 32,
+        "both_solved": 31,
+        "cost": 0.352571,
+        "time": 0.0
+      },
+      "SafetyAndMonitoring": {
+        "total": 10,
+        "solved": 7,
+        "antlr_solved": 7,
+        "codesys_solved": 7,
+        "both_solved": 7,
+        "cost": 0.122629,
+        "time": 0.0
+      },
+      "SequentialLogicControl": {
+        "total": 12,
+        "solved": 10,
+        "antlr_solved": 10,
+        "codesys_solved": 11,
+        "both_solved": 10,
+        "cost": 0.111338,
+        "time": 0.0
+      }
+    },
+    "antlr_final_pass": 73,
+    "antlr_final_pass_rate": 77.66,
+    "codesys_final_pass": 73,
+    "codesys_final_pass_rate": 77.66,
+    "both_final_pass": 70,
+    "both_final_pass_rate": 74.47,
+    "cost_currency": "CNY"
+  }
+}

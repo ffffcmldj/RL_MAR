@@ -64,35 +64,30 @@ class Agent(Node):
         # response = self.llm.gen(prompt)
         prompt = self._process_inputs(input, spatial_info, temporal_info, **kwargs)
         # --- Start of Modification ---
-        response = None  # 1. 初始化 response 变量
+        response = None
         try:
             response = self.llm.gen(prompt)
-            # 2. 检查 LLM 是否返回了空内容
             if not response:
                 logger.error(f"Agent {self.id} (Role: {self.role.role}) received an empty or invalid response from the LLM.")
-                return "" # 返回空字符串，避免程序崩溃
+                return ""
         except Exception as e:
-            # 3. 捕获 API 调用过程中的任何异常
             logger.error(f"Agent {self.id} (Role: {self.role.role}) failed during LLM API call: {e}")
-            return "" # 返回空字符串，避免程序崩溃
+            return ""
         # --- End of Modification --- 
         
-        # --- 消融模式: 跳过 Agent 级别的后处理 ---
         if get_ablation_mode() == 'no_post_process':
             response, validation_info = response, {"passed": True, "errors": []}
         else:
             response, validation_info = post_process(input, response, self.post_process)
 
-        # --- CODESYS 验证重试循环 ---
         if self.post_process == "CodesysSemanticCheck" and get_ablation_mode() != 'no_post_process':
-            max_retries = 1  # 最多重试 1 次（即总共最多 2 次尝试）
+            max_retries = 1
             for attempt in range(max_retries):
                 if validation_info.get("passed", False):
                     break
 
                 logger.warning(f"Agent {self.id} (Role: {self.role.role}) CODESYS validation failed, retrying ({attempt+1}/{max_retries})...")
 
-                # 构造修正 prompt：把 CODESYS 编译错误喂给 LLM
                 error_details = validation_info.get("errors", [])
                 error_text = ""
                 for e in error_details:
@@ -188,7 +183,6 @@ class FinalRefer(Node):
         super().__init__(id, agent_name, domain, llm_name)
         self.llm = LLMRegistry.get(llm_name)
         self.prompt_file = json.load(open(f"{prompt_file}", 'r', encoding='utf-8'))
-        # 消融指标追踪
         self.retry_count = 0
         self.first_pass_code = None
 
@@ -208,12 +202,10 @@ class FinalRefer(Node):
         logger.debug(f"Final User Prompt:\n {prompt[1]['content']}")
         logger.debug(f"Final Response:\n {response}")
 
-        # 记录首次生成代码 (消融指标)
         first_code = _extract_st_code(response)
         self.first_pass_code = first_code
         self.retry_count = 0
 
-        # --- CODESYS 编译验证 + 修正循环 ---
         if get_ablation_mode() in ('no_codesys_feedback', 'no_post_process'):
             logger.info(f"FinalNode: [Ablation:{get_ablation_mode()}] CODESYS feedback disabled, skipping internal compilation check")
             return response
@@ -242,7 +234,6 @@ class FinalRefer(Node):
                 logger.warning(f"FinalNode: max retries ({max_retries + 1}) exhausted, returning last response.")
                 return response
 
-            # 构造修复 prompt
             error_text = ""
             for e in codesys_result.get("errors", []):
                 error_text += f"  - {e.get('ErrorDesc', str(e))}\n"

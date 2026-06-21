@@ -1,0 +1,74 @@
+{
+  "ablation_mode": "no_role_config",
+  "model": "deepseek-ai/DeepSeek-V3.2",
+  "total_samples": 94,
+  "overall_pass_rate": 0.7872,
+  "overall_solved": 74,
+  "avg_cost": 0.018204,
+  "total_cost": 1.7112,
+  "avg_agents": 3.1044,
+  "total_tokens": 754897,
+  "avg_tokens_per_task": 8031,
+  "domain_stats": {
+    "SequentialLogicControl": {
+      "total": 42,
+      "solved": 37,
+      "pass_rate": 0.8809523809523809,
+      "avg_cost": 0.018012738095238075,
+      "avg_tokens": 7970.190476190476
+    },
+    "ProcessControl": {
+      "total": 9,
+      "solved": 5,
+      "pass_rate": 0.5555555555555556,
+      "avg_cost": 0.021877444444444442,
+      "avg_tokens": 9650.222222222223
+    },
+    "MotionAndSortingControl": {
+      "total": 9,
+      "solved": 8,
+      "pass_rate": 0.8888888888888888,
+      "avg_cost": 0.01485244444444445,
+      "avg_tokens": 6520.111111111111
+    },
+    "DataHandlingAndCommunication": {
+      "total": 29,
+      "solved": 19,
+      "pass_rate": 0.6551724137931034,
+      "avg_cost": 0.018444793103448296,
+      "avg_tokens": 8140.275862068966
+    },
+    "SafetyAndMonitoring": {
+      "total": 5,
+      "solved": 5,
+      "pass_rate": 1.0,
+      "avg_cost": 0.017830399999999903,
+      "avg_tokens": 7709.6
+    }
+  },
+  "codesys_validation": {
+    "total": 94,
+    "passed": 81,
+    "pass_rate": 0.8617,
+    "antlr_pass_rate": 0.7872
+  },
+  "codesys_comparison": {
+    "both_pass": 71,
+    "both_fail": 10,
+    "antlr_only": 3,
+    "codesys_only": 10
+  },
+  "experiment_info": {
+    "ablation_mode": "no_role_config",
+    "model": "deepseek-ai/DeepSeek-V3.2",
+    "model_timestamp": "20260603_074104",
+    "train_mode": false,
+    "cost_rate": 20.0,
+    "max_agent": 6,
+    "use_async": true,
+    "data_path": "Datasets/PLC/data/0513/integrated_0519_classified_corrected_0526_backup.jsonl",
+    "output_dir": "Experiments/results/Ablation_no_role_config_deepseek-ai_DeepSeek-V3.2_20260603_074104",
+    "cost_currency": "CNY",
+    "generic_description": "You are a general PLC assistant contributing to a collaborative code generation task. Read the task requirements and the outputs from other agents, then produce your output according to the required format. Do not assume any specialized role."
+  }
+}
