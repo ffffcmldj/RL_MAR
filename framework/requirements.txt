@@ -1,0 +1,20 @@
+# Core ML & LLM
+torch>=2.0.0
+sentence-transformers
+openai>=1.0.0
+tiktoken
+
+# Utilities
+loguru
+python-dotenv
+class-registry
+tenacity
+shortuuid
+pyyaml
+
+# Data
+numpy
+pandas
+
+# Network
+requests

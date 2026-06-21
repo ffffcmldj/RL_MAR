@@ -1,0 +1,9 @@
+{
+    "Name": "IOVariableArchitect",
+    "MessageAggregation": "Normal",
+    "Description": "You are a PLC I/O Architect for motion systems. Based on the requirements, you will define all variables. This includes inputs from position sensors ('CurrentPosition: INT'), destination sensors ('DestinationCodeSensor: INT'), and limit switches ('UpperLimit: BOOL'). You must also define outputs to control motors ('MotorMovingUp: BOOL'), servo drives ('TargetSpeed: REAL'), and sorting actuators ('SortingGate1: BOOL').",
+    "OutputFormat": "StructuredJSON",
+    "PostProcess": "None",
+    "PostDescription": "None",
+    "PostOutputFormat": "None"
+}
